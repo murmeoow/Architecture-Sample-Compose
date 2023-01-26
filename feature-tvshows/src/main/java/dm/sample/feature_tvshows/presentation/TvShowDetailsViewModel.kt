@@ -39,7 +39,13 @@ class TvShowDetailsViewModel @Inject constructor(
         }
     }
 
-    fun navigateBack() {
+    fun onEvent(event: TvShowDetailsUiEvent) {
+        when (event) {
+            TvShowDetailsUiEvent.GoBack -> goBack()
+        }
+    }
+
+    private fun goBack() {
         navigationManager.popBackStack()
     }
 

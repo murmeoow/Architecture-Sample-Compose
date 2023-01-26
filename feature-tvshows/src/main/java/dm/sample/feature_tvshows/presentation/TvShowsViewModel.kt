@@ -1,6 +1,5 @@
 package dm.sample.feature_tvshows.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,20 +27,24 @@ class TvShowsViewModel @Inject constructor(
         _uiState.update { it.copy(isLoading = true) }
             getAllTvShowsUseCase.invoke()
                 .onSuccess { tvShows ->
-                    Log.d("STATE1", "shows = ${tvShows} ")
                     _uiState.update { it.copy(
                         isLoading = false,
                         tvShows = tvShows.map { it.toUi() }
                     ) }
                 }
                 .onFailure {
-                    Log.d("bug", "error = ${it} ")
                     _uiState.update { it.copy(isError = true, isLoading = false) }
                 }
         }
     }
 
-    fun navigateToDetails(id: Long) {
+    fun onEvent(event: TvShowsUiEvent) {
+        when (event) {
+            is TvShowsUiEvent.GoToDetails -> goToDetails(event.showId)
+        }
+    }
+
+    private fun goToDetails(id: Long) {
         navigationManager.navigate(TvShowsDestination.TvShowDetails.tvShowDetails(id))
     }
 

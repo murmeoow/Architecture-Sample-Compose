@@ -1,6 +1,5 @@
 package dm.sample.feature_tvshows.presentation.composables.list
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import dm.sample.feature_tvshows.presentation.TvShowsUiEvent
 import dm.sample.feature_tvshows.presentation.TvShowsViewModel
 import dm.sample.feature_tvshows.presentation.composables.TvShowsLoadingContent
 
@@ -21,7 +21,6 @@ fun TvShowsScreen(
     viewModel: TvShowsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsState()
-    Log.d("STATE1", "shows = ${state.tvShows} isLoading = ${state.isLoading}")
     when {
         state.isLoading -> TvShowsLoadingContent()
         state.isError -> {
@@ -34,7 +33,7 @@ fun TvShowsScreen(
                 tvShows = state.tvShows,
                 state = rememberLazyGridState(),
                 contentPadding = PaddingValues(horizontal = 24.dp),
-                onTvShowClick = { viewModel.navigateToDetails(it) }
+                onTvShowClick = { viewModel.onEvent(TvShowsUiEvent.GoToDetails(it)) }
             )
         }
     }
